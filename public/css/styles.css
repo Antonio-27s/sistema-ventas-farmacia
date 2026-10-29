@@ -1,0 +1,1153 @@
+/* ============================================================
+   SISTEMA DE VENTAS - FARMACIA
+   Hoja de estilos general: login y vista de sesion
+   Paleta: azules y morados (estilo moderno)
+   ============================================================ */
+
+:root {
+    /* --- Paleta principal --- */
+    --azul-900:   #1e1b4b;
+    --azul-800:   #312e81;
+    --azul-600:   #4f46e5;
+    --azul-500:   #6366f1;
+    --morado-700: #6d28d9;
+    --morado-500: #8b5cf6;
+    --morado-300: #c4b5fd;
+    --rosa-600:   #db2777;
+
+    /* --- Textos y superficies --- */
+    --blanco:      #ffffff;
+    --texto-claro: #eef2ff;
+    --texto-suave: #c7d2fe;
+    --fondo-error: rgba(254, 226, 226, 0.92);
+    --texto-error: #b91c1c;
+    --ok:          #4ade80;
+
+    /* --- Forma --- */
+    --radio:  18px;
+    --sombra: 0 20px 45px rgba(15, 10, 60, 0.35);
+}
+
+* {
+    box-sizing: border-box;
+}
+
+/* ------------------------------------------------------------
+   FONDO GENERAL
+   Hoy: degradado azul → morado con halos de luz.
+   ------------------------------------------------------------ */
+body {
+    margin: 0;
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 24px;
+    font-family: 'Segoe UI', 'Helvetica Neue', Arial, sans-serif;
+    color: var(--texto-claro);
+    color-scheme: dark;
+    background-color: var(--azul-900);
+    background-image:
+        radial-gradient(circle at 18% 12%, rgba(139, 92, 246, 0.35), transparent 45%),
+        radial-gradient(circle at 82% 85%, rgba(59, 130, 246, 0.30), transparent 50%),
+        linear-gradient(135deg, #1e1b4b 0%, #312e81 45%, #6d28d9 100%);
+    background-attachment: fixed;
+
+    /* =========================================================
+       ESPACIO RESERVADO PARA LA IMAGEN DE FONDO
+       Cuando la tengas:
+       1. Colocala en public/img/fondo.jpg (o ajusta la ruta)
+       2. Reemplaza la propiedad background-image anterior
+          por esta. El gradado oscuro DE ENCIMA de la foto
+          garantiza la legibilidad del texto:
+
+          background-image:
+              linear-gradient(rgba(30, 27, 75, 0.78),
+                              rgba(109, 40, 217, 0.78)),
+              url('../img/fondo.jpg');
+          background-size: cover;
+          background-position: center;
+       ========================================================= */
+}
+
+/* ------------------------------------------------------------
+   TARJETA (contenedor de login y sesion): vidrio esmerilado
+   ------------------------------------------------------------ */
+.tarjeta {
+    position: relative;
+    width: min(460px, 100%);
+    background: linear-gradient(160deg, rgba(255, 255, 255, 0.14), rgba(255, 255, 255, 0.06));
+    border: 1px solid rgba(255, 255, 255, 0.22);
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
+    border-radius: var(--radio);
+    box-shadow: var(--sombra);
+    padding: 40px 38px;
+    overflow: hidden;
+}
+
+/* Franja superior con degradado: acento de marca */
+.tarjeta::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 5px;
+    background: linear-gradient(90deg, var(--azul-500), var(--morado-500), var(--azul-600));
+}
+
+.tarjeta h1 {
+    font-size: 20px;
+    color: var(--blanco);
+    margin: 0 0 4px;
+    letter-spacing: 0.3px;
+}
+
+/* ------------------------------------------------------------
+   MARCA (solo login)
+   ------------------------------------------------------------ */
+.marca {
+    text-align: center;
+    margin-bottom: 24px;
+}
+
+.marca .logo {
+    width: 64px;
+    height: 64px;
+    margin: 0 auto 14px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 30px;
+    background: linear-gradient(135deg, var(--azul-500), var(--morado-500));
+    border-radius: 20px;
+    box-shadow: 0 8px 20px rgba(99, 102, 241, 0.45);
+}
+
+.marca p {
+    margin: 4px 0 0;
+    font-size: 13px;
+    color: var(--texto-suave);
+}
+
+/* ------------------------------------------------------------
+   FORMULARIO
+   ------------------------------------------------------------ */
+.campo {
+    margin-bottom: 16px;
+}
+
+.campo label {
+    display: block;
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 0.6px;
+    text-transform: uppercase;
+    color: var(--texto-suave);
+    margin-bottom: 6px;
+}
+
+.campo input,
+.campo select {
+    width: 100%;
+    padding: 12px 14px;
+    font-size: 15px;
+    color: var(--blanco);
+    background: rgba(255, 255, 255, 0.10);
+    border: 1px solid rgba(255, 255, 255, 0.28);
+    border-radius: 10px;
+    outline: none;
+    transition: border-color 0.2s, box-shadow 0.2s, background 0.2s;
+}
+
+.campo input::placeholder {
+    color: rgba(238, 242, 255, 0.45);
+}
+
+.campo input:focus,
+.campo select:focus {
+    border-color: var(--morado-300);
+    background: rgba(255, 255, 255, 0.16);
+    box-shadow: 0 0 0 4px rgba(139, 92, 246, 0.25);
+}
+
+/* El select con la opcion por defecto (sin eleccion) se muestra
+   mas tenue, como un placeholder */
+.campo select:invalid {
+    color: rgba(238, 242, 255, 0.45);
+}
+
+/* Items del desplegable: heredan el color blanco del select,
+   pero el menu los dibuja sobre fondo claro → texto negro
+   fijo, visible sin depender del hover */
+.campo select option {
+    color: #000;
+    background: #fff;
+}
+
+/* Boton de ingresar */
+.btn-ingresar {
+    display: block;
+    width: 100%;
+    margin-top: 24px;
+    padding: 13px;
+    font-size: 15px;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+    color: var(--blanco);
+    background: linear-gradient(135deg, var(--azul-600), var(--morado-500));
+    border: none;
+    border-radius: 12px;
+    cursor: pointer;
+    box-shadow: 0 10px 22px rgba(109, 40, 217, 0.4);
+    transition: transform 0.15s, box-shadow 0.15s, filter 0.15s;
+}
+
+.btn-ingresar:hover {
+    transform: translateY(-2px);
+    filter: brightness(1.08);
+    box-shadow: 0 14px 26px rgba(109, 40, 217, 0.5);
+}
+
+.btn-ingresar:active {
+    transform: translateY(0);
+}
+
+/* Mensaje de error */
+.error {
+    background: var(--fondo-error);
+    color: var(--texto-error);
+    border: 1px solid rgba(185, 28, 28, 0.35);
+    padding: 11px 14px;
+    border-radius: 10px;
+    margin-bottom: 18px;
+    font-size: 14px;
+}
+
+/* ------------------------------------------------------------
+   VISTA DE SESION
+   ------------------------------------------------------------ */
+.ok {
+    color: var(--ok);
+    font-weight: 700;
+    font-size: 14px;
+    letter-spacing: 0.4px;
+    margin: 10px 0 18px;
+}
+
+.tarjeta table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 14px;
+}
+
+.tarjeta td {
+    padding: 9px 8px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.14);
+    vertical-align: top;
+}
+
+.tarjeta td:first-child {
+    color: var(--texto-suave);
+    width: 45%;
+}
+
+.tarjeta td:last-child {
+    font-weight: 700;
+    color: var(--blanco);
+    word-break: break-all;
+}
+
+.botones {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-top: 22px;
+}
+
+a.btn {
+    flex: 1;
+    min-width: 140px;
+    text-align: center;
+    text-decoration: none;
+    padding: 11px 16px;
+    border-radius: 12px;
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--blanco);
+    background: rgba(255, 255, 255, 0.14);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    transition: background 0.2s, transform 0.15s, filter 0.15s;
+}
+
+a.btn:hover {
+    background: rgba(255, 255, 255, 0.24);
+    transform: translateY(-1px);
+}
+
+/* Boton de cerrar sesion */
+a.btn-salir {
+    background: linear-gradient(135deg, #e11d48, var(--rosa-600));
+    border: none;
+    box-shadow: 0 8px 18px rgba(225, 29, 72, 0.35);
+}
+
+a.btn-salir:hover {
+    background: linear-gradient(135deg, #e11d48, var(--rosa-600));
+    filter: brightness(1.08);
+}
+
+.pie {
+    margin-top: 18px;
+    font-size: 13px;
+    color: var(--texto-suave);
+    opacity: 0.85;
+}
+
+/* ------------------------------------------------------------
+   RESPONSIVE
+   ------------------------------------------------------------ */
+@media (max-width: 480px) {
+    .tarjeta {
+        padding: 30px 22px;
+    }
+}
+
+/* ------------------------------------------------------------
+   RECUADRO "RECORDAR SESION" (login)
+   ------------------------------------------------------------ */
+.check {
+    display: flex;
+    align-items: center;
+    gap: 9px;
+    margin-bottom: 0;
+    font-size: 14px;
+    font-weight: 400;
+    letter-spacing: 0;
+    text-transform: none;
+    color: var(--texto-suave);
+    cursor: pointer;
+}
+
+.check input[type="checkbox"] {
+    width: 17px;
+    height: 17px;
+    margin: 0;
+    flex-shrink: 0;
+    accent-color: var(--morado-500);
+    cursor: pointer;
+}
+
+.check:hover span {
+    color: var(--blanco);
+}
+
+/* ------------------------------------------------------------
+   CAJA DE AVISO (vistas sin_acceso y en_construccion)
+   ------------------------------------------------------------ */
+.aviso {
+    background: rgba(255, 255, 255, 0.10);
+    border: 1px solid rgba(255, 255, 255, 0.25);
+    color: var(--texto-claro);
+    padding: 12px 14px;
+    border-radius: 10px;
+    margin-bottom: 8px;
+    font-size: 14px;
+    line-height: 1.55;
+}
+
+/* ------------------------------------------------------------
+   CAJA DE INFORMACION (login: sesion por inactividad)
+   ------------------------------------------------------------ */
+.info {
+    background: rgba(199, 210, 254, 0.18);
+    border: 1px solid rgba(199, 210, 254, 0.45);
+    color: var(--texto-claro);
+    padding: 11px 14px;
+    border-radius: 10px;
+    margin-bottom: 18px;
+    font-size: 14px;
+}
+
+/* ------------------------------------------------------------
+   HUELLA DE VERSION (pie de login y sesion)
+   ------------------------------------------------------------ */
+.version {
+    margin: 18px 0 0;
+    text-align: center;
+    font-size: 12px;
+    color: var(--texto-suave);
+    opacity: 0.7;
+}
+
+/* ============================================================
+   APP SHELL (post-login): header + aside + contenido
+   Tema claro para legibilidad (login conserva el tema oscuro)
+   ============================================================ */
+body.app {
+    display: block;
+    padding: 0;
+    min-height: 100vh;
+    background-color: #eef1f7;
+    background-image: none;
+    color: #242a3a;
+    color-scheme: light;
+}
+
+/* ------------------------------------------------------------
+   HEADER SUPERIOR (topbar)
+   ------------------------------------------------------------ */
+.topbar {
+    position: sticky;
+    top: 0;
+    z-index: 40;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    padding: 10px 22px;
+    background: linear-gradient(120deg, #1e1b4b, #312e81 45%, #6d28d9);
+    color: var(--blanco);
+    box-shadow: 0 4px 18px rgba(30, 27, 75, 0.28);
+}
+
+.topbar .marca-top {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    white-space: nowrap;
+}
+
+.topbar .logo-mini {
+    width: 32px;
+    height: 32px;
+    border-radius: 9px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 16px;
+    background: rgba(255, 255, 255, 0.14);
+    border: 1px solid rgba(255, 255, 255, 0.22);
+}
+
+.topbar .marca-nombre {
+    display: flex;
+    flex-direction: column;
+    line-height: 1.12;
+    font-weight: 700;
+    font-size: 14.5px;
+}
+
+.topbar .marca-nombre small {
+    font-size: 11px;
+    font-weight: 400;
+    color: var(--texto-suave);
+}
+
+.chip-usuario {
+    display: flex;
+    flex-direction: column;
+    line-height: 1.15;
+    margin-left: auto;
+    padding: 6px 12px;
+    background: rgba(255, 255, 255, 0.10);
+    border: 1px solid rgba(255, 255, 255, 0.18);
+    border-radius: 10px;
+}
+
+.chip-usuario strong {
+    font-size: 13px;
+    color: var(--blanco);
+}
+
+.chip-usuario span {
+    font-size: 11px;
+    color: var(--texto-suave);
+}
+
+.topbar nav {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    flex-wrap: wrap;
+}
+
+.topbar nav a,
+.topbar nav button {
+    color: #e6e9ff;
+    text-decoration: none;
+    font-size: 13.5px;
+    font-weight: 600;
+    font-family: inherit;
+    padding: 8px 12px;
+    border-radius: 9px;
+    border: 1px solid transparent;
+    background: transparent;
+    cursor: pointer;
+    transition: background 0.15s, color 0.15s;
+}
+
+.topbar nav a:hover,
+.topbar nav button:hover {
+    background: rgba(255, 255, 255, 0.14);
+    color: var(--blanco);
+}
+
+.topbar nav a.activa {
+    background: rgba(255, 255, 255, 0.18);
+    color: var(--blanco);
+}
+
+/* Cerrar sesion: destacado en rojo */
+.topbar nav a.salir {
+    background: rgba(225, 29, 72, 0.25);
+    border-color: rgba(255, 255, 255, 0.25);
+    color: #ffe4e6;
+}
+
+.topbar nav a.salir:hover {
+    background: rgba(225, 29, 72, 0.5);
+    color: var(--blanco);
+}
+
+/* ------------------------------------------------------------
+   LAYOUT: aside a la izquierda + contenido
+   ------------------------------------------------------------ */
+.layout {
+    display: grid;
+    grid-template-columns: 232px minmax(0, 1fr);
+    gap: 20px;
+    max-width: 1180px;
+    margin: 24px auto;
+    padding: 0 20px 40px;
+    align-items: start;
+}
+
+.aside {
+    background: var(--blanco);
+    border-radius: 14px;
+    box-shadow: 0 6px 18px rgba(30, 27, 75, 0.07);
+    padding: 16px 12px;
+    position: sticky;
+    top: 84px;
+}
+
+.aside h2 {
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: #8a91a5;
+    margin: 4px 10px 10px;
+}
+
+.aside ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+.aside li a {
+    display: block;
+    padding: 9px 12px;
+    border-radius: 9px;
+    border-left: 3px solid transparent;
+    font-size: 14px;
+    color: #3a4152;
+    text-decoration: none;
+    transition: background 0.15s, color 0.15s;
+}
+
+.aside li a:hover {
+    background: #f2f4fc;
+    color: #4338ca;
+}
+
+.aside li a.activa {
+    background: linear-gradient(90deg, rgba(99, 102, 241, 0.12), rgba(139, 92, 246, 0.08));
+    color: #4338ca;
+    font-weight: 700;
+    border-left-color: var(--azul-500);
+}
+
+.principal {
+    min-width: 0;
+}
+
+/* Tarjeta de contenido (tema claro) */
+.tarjeta-app {
+    background: var(--blanco);
+    border-radius: 14px;
+    box-shadow: 0 6px 18px rgba(30, 27, 75, 0.07);
+    padding: 26px 28px;
+}
+
+.tarjeta-app h1 {
+    margin: 0 0 4px;
+    font-size: 21px;
+    color: var(--azul-900);
+}
+
+.tarjeta-app .sub {
+    margin: 0 0 20px;
+    color: #6b7280;
+    font-size: 14px;
+}
+
+.tarjeta-app.narrow {
+    max-width: 620px;
+}
+
+/* Tarjetas del dashboard */
+.tarjetas-3 {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 14px;
+    margin-top: 6px;
+}
+
+.mini-card {
+    border: 1px solid #e8ebf3;
+    border-radius: 12px;
+    padding: 16px;
+    background: #fbfcfe;
+}
+
+.mini-card h3 {
+    margin: 0 0 8px;
+    font-size: 14px;
+    color: var(--azul-900);
+}
+
+.mini-card .texto-card {
+    margin: 0 0 10px;
+    font-size: 13.5px;
+    color: #3a4152;
+    line-height: 1.55;
+}
+
+.lista-modulos {
+    margin: 0;
+    padding-left: 18px;
+    font-size: 13.5px;
+    color: #3a4152;
+    line-height: 2;
+}
+
+/* Titulo centrado (en construccion / sin acceso) */
+.marca-center {
+    text-align: center;
+    margin-bottom: 18px;
+}
+
+.marca-center h1 {
+    margin: 8px 0 4px;
+}
+
+.marca-center p {
+    margin: 0;
+    color: #6b7280;
+    font-size: 14px;
+}
+
+/* ------------------------------------------------------------
+   TABLAS (módulos con tema claro)
+   ------------------------------------------------------------ */
+.tabla-scroll {
+    overflow-x: auto;
+}
+
+.tabla {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 14px;
+}
+
+.tabla th {
+    text-align: left;
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
+    color: #8a91a5;
+    padding: 8px 10px;
+    border-bottom: 2px solid #e8ebf3;
+    white-space: nowrap;
+}
+
+/* Fila tipo "campo: valor" (perfil) */
+.tabla th[scope="row"] {
+    font-size: 13px;
+    font-weight: 600;
+    text-transform: none;
+    letter-spacing: 0;
+    color: #6b7280;
+    width: 45%;
+}
+
+.tabla td {
+    padding: 11px 10px;
+    border-bottom: 1px solid #eef0f6;
+    vertical-align: middle;
+    color: #242a3a;
+}
+
+.tabla tbody tr:hover td,
+.tabla tr:hover td {
+    background: #f8f9fe;
+}
+
+.celda-acciones {
+    white-space: nowrap;
+}
+
+/* ------------------------------------------------------------
+   BOTONES PEQUENOS Y FORMAS (tema claro)
+   ------------------------------------------------------------ */
+.btn-sm {
+    display: inline-block;
+    padding: 7px 12px;
+    font-size: 13px;
+    font-weight: 600;
+    font-family: inherit;
+    border-radius: 9px;
+    border: 1px solid #cdd3e8;
+    background: var(--blanco);
+    color: #4338ca;
+    text-decoration: none;
+    cursor: pointer;
+    transition: background 0.15s, border-color 0.15s;
+}
+
+.btn-sm:hover {
+    background: #eef0ff;
+    border-color: #8b8ff8;
+}
+
+.btn-sm.peligro {
+    color: var(--texto-error);
+    border-color: #f1c1c1;
+}
+
+.btn-sm.peligro:hover {
+    background: #fdecec;
+    border-color: #e79a9a;
+}
+
+.forma-linea {
+    display: inline;
+    margin: 0;
+}
+
+.nota-linea {
+    font-size: 11.5px;
+    color: #8a91a5;
+}
+
+.botones-app {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-top: 20px;
+}
+
+/* Badges de estado */
+.badge {
+    display: inline-block;
+    padding: 3px 10px;
+    border-radius: 999px;
+    font-size: 12px;
+    font-weight: 700;
+    vertical-align: middle;
+}
+
+.badge.ok {
+    background: #e7f7ee;
+    color: #157347;
+    border: 1px solid #b7e4c7;
+}
+
+.badge.off {
+    background: #f1f2f6;
+    color: #6b7280;
+    border: 1px solid #dcdfe8;
+}
+
+/* Avisos en tema claro */
+.tarjeta-app .aviso {
+    background: #f2f4fc;
+    border: 1px solid #d8ddf5;
+    color: #3a4152;
+}
+
+.tarjeta-app .aviso.ok {
+    background: #e7f7ee;
+    border-color: #b7e4c7;
+    color: #157347;
+}
+
+/* Formulario (definir contrasena) en tema claro */
+.form-app .campo {
+    margin-bottom: 14px;
+}
+
+.form-app label {
+    display: block;
+    font-size: 12px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    color: #6b7280;
+    margin-bottom: 6px;
+}
+
+.form-app input {
+    width: 100%;
+    padding: 11px 13px;
+    font-size: 15px;
+    font-family: inherit;
+    color: #242a3a;
+    background: #fbfcfe;
+    border: 1px solid #cdd3e8;
+    border-radius: 10px;
+    outline: none;
+    transition: border-color 0.15s, box-shadow 0.15s, background 0.15s;
+}
+
+.form-app input:focus {
+    border-color: var(--azul-500);
+    background: var(--blanco);
+    box-shadow: 0 0 0 4px rgba(99, 102, 241, 0.15);
+}
+
+.form-app .ayuda {
+    margin: 6px 0 0;
+    font-size: 12px;
+    color: #8a91a5;
+}
+
+/* ------------------------------------------------------------
+   PANEL DE SESION (temporal, se abre desde el header)
+   ------------------------------------------------------------ */
+#panel-fondo {
+    position: fixed;
+    inset: 0;
+    background: rgba(17, 14, 50, 0.45);
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.25s;
+    z-index: 55;
+}
+
+#panel-fondo.visible {
+    opacity: 1;
+    pointer-events: auto;
+}
+
+#panel-sesion {
+    position: fixed;
+    top: 0;
+    right: 0;
+    width: min(400px, 94vw);
+    height: 100vh;
+    overflow-y: auto;
+    padding: 22px 24px;
+    background: var(--blanco);
+    color: #242a3a;
+    box-shadow: -16px 0 44px rgba(17, 14, 50, 0.28);
+    transform: translateX(105%);
+    transition: transform 0.28s ease;
+    z-index: 60;
+}
+
+#panel-sesion.abierto {
+    transform: translateX(0);
+}
+
+#panel-sesion h2 {
+    margin: 0;
+    padding-right: 30px;
+    font-size: 17px;
+    color: var(--azul-900);
+}
+
+#panel-sesion .ok {
+    color: #157347;
+}
+
+#panel-sesion .cerrar-panel {
+    position: absolute;
+    top: 18px;
+    right: 16px;
+    width: 30px;
+    height: 30px;
+    border-radius: 8px;
+    border: 1px solid #dcdfe8;
+    background: var(--blanco);
+    color: #6b7280;
+    font-size: 15px;
+    cursor: pointer;
+}
+
+#panel-sesion .cerrar-panel:hover {
+    background: #f2f4fc;
+    color: var(--azul-900);
+}
+
+#panel-sesion table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 13.5px;
+    margin-top: 14px;
+}
+
+#panel-sesion td {
+    padding: 8px 6px;
+    border-bottom: 1px solid #eef0f6;
+    vertical-align: top;
+}
+
+#panel-sesion td:first-child {
+    width: 48%;
+    color: #6b7280;
+}
+
+#panel-sesion td:last-child {
+    font-weight: 600;
+    word-break: break-all;
+}
+
+#panel-sesion .version {
+    margin-top: 14px;
+    text-align: left;
+    color: #8a91a5;
+    opacity: 1;
+}
+
+/* Version en el contenido (tema claro) */
+.version-app {
+    margin-top: 18px;
+    font-size: 12px;
+    color: #8a91a5;
+}
+
+/* ------------------------------------------------------------
+   MODULO 8.1: CATALOGO DE PRODUCTOS
+   ------------------------------------------------------------ */
+.fila-titulo {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 14px;
+    flex-wrap: wrap;
+    margin-bottom: 18px;
+}
+
+.fila-titulo h1 {
+    margin-bottom: 2px;
+}
+
+.fila-titulo .sub {
+    margin-bottom: 0;
+}
+
+.botones-app.sin-margen {
+    margin-top: 0;
+}
+
+/* Barra de busqueda/filtro del catalogo */
+.barra-busqueda {
+    display: grid;
+    grid-template-columns: minmax(0, 2fr) minmax(0, 1fr) auto;
+    gap: 10px;
+    margin-bottom: 16px;
+}
+
+.barra-busqueda input,
+.barra-busqueda select {
+    padding: 10px 13px;
+    font-size: 14px;
+    font-family: inherit;
+    color: #242a3a;
+    background: #fbfcfe;
+    border: 1px solid #cdd3e8;
+    border-radius: 10px;
+    outline: none;
+    transition: border-color 0.15s, box-shadow 0.15s, background 0.15s;
+}
+
+.barra-busqueda input:focus,
+.barra-busqueda select:focus {
+    border-color: var(--azul-500);
+    background: var(--blanco);
+    box-shadow: 0 0 0 4px rgba(99, 102, 241, 0.15);
+}
+
+/* Boton primario (degradado de marca) */
+.btn-sm.primario {
+    background: linear-gradient(135deg, var(--azul-600), var(--morado-500));
+    border-color: transparent;
+    color: var(--blanco);
+}
+
+.btn-sm.primario:hover {
+    filter: brightness(1.1);
+}
+
+/* Formulario en dos columnas (producto) */
+.grid-2 {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 0 16px;
+}
+
+/* Listado + formulario lado a lado (categorias/laboratorios) */
+.panel-grid {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) 340px;
+    gap: 18px;
+    align-items: start;
+}
+
+/* Sublinea de celda (principio activo bajo el nombre) */
+.sub-celda {
+    display: block;
+    font-size: 12px;
+    color: #8a91a5;
+}
+
+/* Checkboxes en tema claro */
+.check-claro {
+    display: flex;
+    align-items: center;
+    gap: 9px;
+    font-size: 14px;
+    color: #3a4152;
+    cursor: pointer;
+    margin-bottom: 10px;
+}
+
+.check-claro input {
+    width: 17px;
+    height: 17px;
+    margin: 0;
+    accent-color: var(--morado-500);
+    cursor: pointer;
+    flex-shrink: 0;
+}
+
+.form-app .check-claro label {
+    margin: 0;
+    font-size: 14px;
+    font-weight: 400;
+    text-transform: none;
+    letter-spacing: 0;
+    color: #3a4152;
+    cursor: pointer;
+}
+
+.form-app h3.form-titulo {
+    margin: 0 0 14px;
+    font-size: 15px;
+    color: var(--azul-900);
+}
+
+/* Celda vacia (listados sin resultados) */
+.tabla .vacio {
+    text-align: center;
+    color: #8a91a5;
+    padding: 26px 10px;
+}
+
+.tabla .vacio a {
+    color: #4338ca;
+    font-weight: 600;
+}
+
+/* Tarjeta amplia (formulario de producto) */
+.tarjeta-app.wide {
+    max-width: 820px;
+}
+
+@media (max-width: 640px) {
+    .grid-2 {
+        grid-template-columns: 1fr;
+    }
+
+    .barra-busqueda {
+        grid-template-columns: 1fr;
+    }
+
+    .panel-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+/* ------------------------------------------------------------
+   RESPONSIVE (shell)
+   ------------------------------------------------------------ */
+@media (max-width: 880px) {
+    .layout {
+        grid-template-columns: 1fr;
+        margin-top: 16px;
+    }
+
+    .aside {
+        position: static;
+    }
+
+    .topbar {
+        flex-wrap: wrap;
+    }
+
+    .chip-usuario {
+        margin-left: 0;
+    }
+}
+
+/* ============================================================
+   INCREMENTO 8.2: stock, lotes y validacion de formularios
+   ============================================================ */
+
+/* Badge de advertencia (stock bajo / lote vence pronto) */
+.badge.warn {
+    background: rgba(232, 178, 52, 0.16);
+    color: #d9a915;
+    border: 1px solid rgba(232, 178, 52, 0.55);
+}
+
+/* Contador n/max bajo los campos de texto (validacion-forms.js) */
+.contador {
+    display: block;
+    margin-top: 5px;
+    font-size: 12px;
+    text-align: right;
+    color: rgba(230, 233, 255, 0.55);
+}
+
+.contador.limite {
+    color: #ff8f8f;
+    font-weight: 600;
+}
+
+/* Error en vivo de un campo (ej: DNI sin 8 digitos) */
+.error-campo {
+    display: block;
+    margin-top: 5px;
+    font-size: 12.5px;
+    color: #ff8f8f;
+}
+
+/* Input de cantidad dentro de la fila del stock */
+.ajusta-cant {
+    width: 90px;
+    padding: 6px 8px;
+    border-radius: 8px;
+    border: 1px solid rgba(120, 130, 210, 0.35);
+    background: rgba(10, 14, 44, 0.6);
+    color: #ffffff;
+    text-align: right;
+}
+
+.ajusta-cant:focus {
+    outline: none;
+    border-color: #7c8cf8;
+}
